@@ -1,0 +1,19 @@
+module memory_128x16(op,ip,rd_wr,clk,address);
+output reg [15:0] op;
+input [15:0]  ip;
+input [6:0] address;
+input  rd_wr,clk;
+reg [15:0]  memory[0:128];
+wire rd_w;
+assign rd_w=~rd_wr;
+always @(posedge clk)
+begin
+if (rd_w)
+op=memory[address];
+else
+begin
+op=16'b0000000000000000;
+memory[address]=ip;
+end
+end
+endmodule
