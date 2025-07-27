@@ -1,0 +1,37 @@
+module microprocessor(out,a,b,clk,address,operation,x,r_w);
+input [3:0] a,b;
+input [6:0] address;
+input [2:0] operation;
+input clk,r_w;
+input [1:0] x;
+output [3:0] out;
+wire [3:0] aluop;
+wire rd_wr;
+wire [6:0] addr;
+wire [15:0] teop;
+reg [15:0] xyz;
+assign rd_wr=0;
+wire [15:0] ra;
+wire [15:0] encoop1,encoop2,encoop3;
+assign addr=6'b001001;
+SimpleEncoder se1(a,encoop1);
+memory_128x16 tmem1(teop,encoop1,rd_wr,clk,addr);
+assign addr=6'b100010;
+SimpleEncoder se2(b,encoop2);
+memory_128x16 tmem2(teop,encoop2,rd_wr,clk,addr);
+ALU alu1(a,b,operation,aluop);
+SimpleEncoder se3(aluop,encoop3);
+assign addr=6'b000011;
+memory_128x16 tmem3(teop,encoop3,rd_wr,clk,addr);
+always @(posedge clk)
+if(r_w)
+begin
+case(x)
+2'b00:	assign xyz=encoop1;
+2'b01:	assign xyz=encoop2;
+2'b10:   assign xyz=encoop3;
+endcase
+end
+memory_128x16 tmem5(ra,xyz,r_w,clk,address);
+Simpledecoder deco1(ra,out);
+endmodule
