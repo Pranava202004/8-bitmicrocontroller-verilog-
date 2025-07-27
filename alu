@@ -1,0 +1,21 @@
+module ALU (
+    input [3:0] operand1,
+    input [3:0] operand2,
+    input [2:0] aluOp,
+    output reg [3:0] result
+);
+
+// ALU implementation
+always @*
+    case (aluOp)
+        3'b000: result = {4'b0000, operand1} + {4'b0000, operand2}; // Addition
+        3'b001: result = {4'b0000, operand1} - {4'b0000, operand2}; // Subtraction
+        3'b010: result = {4'b0000, operand1} & {4'b0000, operand2}; // Bitwise AND
+        3'b011: result = {4'b0000, operand1} | {4'b0000, operand2}; // Bitwise OR
+        3'b100: result = {4'b0000, operand1} ^ {4'b0000, operand2}; // Bitwise XOR
+        3'b101: result = {operand1[3], operand1, 3'b0};               // Shift left by 1 bit
+        3'b110: result = {operand1[3], operand1[3:1]};                // Shift right by 1 bit (logical)
+        3'b111: result = {operand1[3], operand1[3], operand1[3:1]};   // Shift right by 1 bit (arithmetic)
+        default: result = 8'h00;                                      // Default: Zero
+    endcase
+endmodule
