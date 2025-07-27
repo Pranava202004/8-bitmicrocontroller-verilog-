@@ -1,0 +1,30 @@
+module mini_tb_6442_v;
+	reg [3:0] a;
+	reg [3:0] b;
+	reg clk;
+	reg [6:0] address;
+	reg [2:0] operation;
+	reg [1:0] x;
+	reg r_w;
+	wire [3:0] out;
+	microprocessor uut (
+		.out(out), 
+		.a(a), 
+		.b(b), 
+		.clk(clk), 
+		.address(address), 
+		.operation(operation), 
+		.x(x), 
+		.r_w(r_w)
+	);
+
+	initial begin
+		a = 4'b1010;	b = 4'b0101;	clk = 1;	address = 6'b000110;	operation = 3'b000;	x = 2'b01;	r_w = 1;	#200;
+    	a = 4'b1010;	b = 4'b0101;	address = 6'b000111;	operation = 3'b001;	x = 2'b00;	r_w = 1;	#200; 
+		a = 4'b1010;	b = 4'b0111;	address = 6'b101000;	operation = 3'b010;	x = 2'b10;	r_w = 1;	#200;  
+		address = 6'b000110;	x = 2'b00;	r_w = 0;	#100;    
+		address = 6'b000111; x = 2'b00; r_w = 0; #100;   
+		address = 6'b101000; x = 2'b10; r_w = 0; #100;
+	end	 always #50 clk=~clk;
+      
+endmodule
